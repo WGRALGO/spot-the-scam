@@ -38,17 +38,15 @@ demands.
 
 ## Screenshots
 
-> **Screenshots not yet captured.** The images below must be taken from the
-> running app on a device or emulator before the v1.0.1 release and committed
-> to the `screenshots/` folder. Replace these placeholders once captured.
+Captured from v1.0.1 running on an Android device.
 
-| Screen   | File                       | Status               |
-|----------|----------------------------|----------------------|
-| Start    | `screenshots/start.png`    | Needs capture        |
-| Question | `screenshots/question.png` | Needs capture        |
-| Feedback | `screenshots/feedback.png` | Needs capture        |
-| Results  | `screenshots/results.png`  | Needs capture        |
-| Privacy  | `screenshots/privacy.png`  | Needs capture        |
+| Start | Question | Feedback |
+|-------|----------|----------|
+| ![Start screen](screenshots/start.png) | ![Question screen](screenshots/question.png) | ![Feedback screen](screenshots/feedback.png) |
+
+| Results | Privacy |
+|---------|---------|
+| ![End-of-round results](screenshots/results.png) | ![In-app privacy info](screenshots/privacy.png) |
 
 ---
 

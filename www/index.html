@@ -1,0 +1,795 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'none'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none';">
+<title>Spot the Scam</title>
+<style>
+  :root {
+    --gold: #d4af37;
+    --gold-bright: #f5d26a;
+    --gold-soft: #fbe79a;
+    --bg-black: #000000;
+    --bg-card: #141414;
+    --text: #ffffff;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    background: #000000;
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+    color: var(--text);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 17px;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  .wgra-app {
+    min-height: 100vh;
+    background: radial-gradient(circle at top, #161616 0%, #050505 55%, #000 100%);
+    padding: 24px 14px calc(40px + env(safe-area-inset-bottom));
+    padding-top: calc(24px + env(safe-area-inset-top));
+  }
+
+  .wgra-shell {
+    width: 100%;
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  /* ---------------- HEADER ---------------- */
+  .wgra-header {
+    text-align: center;
+    margin-bottom: 18px;
+  }
+
+  .wgra-title {
+    margin: 0;
+    font-size: 36px;
+    font-weight: 900;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    background: linear-gradient(90deg, #c89b2b, #fbe79a, #c89b2b);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .wgra-subtitle {
+    margin: 10px auto 0;
+    max-width: 520px;
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--gold-soft);
+    font-weight: 600;
+  }
+
+  .wgra-intro {
+    margin: 12px auto 0;
+    max-width: 560px;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #e8e8e8;
+  }
+
+  .wgra-badges {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin: 16px 0 4px;
+  }
+
+  .wgra-badge {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    padding: 6px 14px;
+    border-radius: 999px;
+    background: rgba(212,175,55,0.10);
+    border: 1px solid rgba(212,175,55,0.55);
+    color: var(--gold-soft);
+  }
+
+  /* ---------------- CARD / PANELS ---------------- */
+  .wgra-panel {
+    background: linear-gradient(135deg, #141414, #1d1d1d);
+    border-radius: 22px;
+    border: 2px solid rgba(245, 210, 106, 0.55);
+    box-shadow: 0 14px 44px rgba(0, 0, 0, 0.9);
+    padding: 26px 20px;
+    margin-top: 18px;
+  }
+
+  .wgra-lead {
+    font-size: 16px;
+    line-height: 1.7;
+    color: #fdfdfd;
+    margin: 0 0 12px;
+  }
+
+  .wgra-rules {
+    list-style: none;
+    padding: 0;
+    margin: 6px 0 18px;
+    font-size: 16px;
+  }
+
+  .wgra-rules li {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    margin-bottom: 8px;
+    line-height: 1.5;
+  }
+
+  .wgra-rules .tag {
+    font-size: 18px;
+    line-height: 1.5;
+  }
+
+  /* ---------------- BUTTONS ---------------- */
+  .wgra-btn {
+    display: inline-block;
+    width: 100%;
+    border: none;
+    cursor: pointer;
+    border-radius: 14px;
+    padding: 16px 20px;
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 0.03em;
+    transition: transform 0.12s ease, box-shadow 0.12s ease, opacity 0.15s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .wgra-btn:active:not(:disabled) { transform: translateY(1px); }
+  .wgra-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+  .wgra-btn:focus-visible {
+    outline: 3px solid #ffffff;
+    outline-offset: 2px;
+  }
+
+  .wgra-btn-primary {
+    background: linear-gradient(90deg, #c89b2b, #fbe79a, #c89b2b);
+    color: #050505;
+    box-shadow: 0 10px 28px rgba(0,0,0,0.85);
+    text-transform: uppercase;
+  }
+
+  .wgra-btn-safe {
+    background: radial-gradient(circle at top, #2a7a42, #163724);
+    color: #eaffef;
+    border: 2px solid rgba(145, 245, 180, 0.85);
+  }
+
+  .wgra-btn-risky {
+    background: radial-gradient(circle at top, #9c2e2e, #421515);
+    color: #ffe8e8;
+    border: 2px solid rgba(255, 150, 150, 0.85);
+  }
+
+  .wgra-btn-next {
+    background: linear-gradient(90deg, #c89b2b, #fbe79a, #c89b2b);
+    color: #050505;
+    box-shadow: 0 10px 28px rgba(0,0,0,0.85);
+  }
+
+  .wgra-btn-ghost {
+    background: transparent;
+    color: var(--gold-soft);
+    border: 1px solid rgba(212,175,55,0.55);
+    font-size: 15px;
+    padding: 12px 16px;
+  }
+
+  .wgra-secondary-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+  }
+  .wgra-secondary-row .wgra-btn { width: auto; flex: 1; }
+
+  /* ---------------- GAME ---------------- */
+  .wgra-game { display: none; }
+
+  .wgra-status {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+  .wgra-status strong { color: var(--gold-soft); }
+
+  .wgra-progress {
+    height: 10px;
+    width: 100%;
+    background: rgba(255,255,255,0.08);
+    border-radius: 999px;
+    overflow: hidden;
+    margin-bottom: 18px;
+  }
+  .wgra-progress-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #c89b2b, #fbe79a);
+    transition: width 0.25s ease;
+  }
+
+  .wgra-difficulty-pill {
+    display: inline-block;
+    font-size: 14px;
+    padding: 5px 14px;
+    border-radius: 999px;
+    background: rgba(251, 231, 154, 0.08);
+    border: 1px solid rgba(251,231,154,0.6);
+    color: var(--gold-soft);
+    font-weight: 600;
+    margin-bottom: 14px;
+  }
+
+  .wgra-scenario {
+    font-size: 19px;
+    line-height: 1.7;
+    color: #fdfdfd;
+    white-space: pre-line;
+    margin: 0 0 4px;
+  }
+
+  .wgra-answers {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 22px;
+  }
+
+  .wgra-feedback {
+    margin-top: 18px;
+    font-size: 16px;
+    line-height: 1.7;
+  }
+  .wgra-feedback-result {
+    font-size: 19px;
+    font-weight: 800;
+    margin-bottom: 6px;
+  }
+  .wgra-feedback-result.good { color: #8df0a6; }
+  .wgra-feedback-result.bad  { color: #ffb0b0; }
+  .wgra-feedback-why {
+    color: #f1f1f1;
+    background: rgba(255,255,255,0.04);
+    border-left: 3px solid var(--gold);
+    padding: 10px 14px;
+    border-radius: 6px;
+  }
+
+  .wgra-next-wrap { margin-top: 18px; }
+
+  /* ---------------- RESULTS ---------------- */
+  .wgra-results-head {
+    text-align: center;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(245,210,106,0.3);
+    margin-bottom: 18px;
+  }
+  .wgra-score-big {
+    font-size: 40px;
+    font-weight: 900;
+    color: var(--gold-soft);
+  }
+  .wgra-score-pct { font-size: 18px; color: #e8e8e8; margin-top: 4px; }
+  .wgra-interpret {
+    margin-top: 12px;
+    font-size: 16px;
+    line-height: 1.6;
+    color: #fdfdfd;
+  }
+
+  .wgra-review-item {
+    border: 1px solid rgba(245,210,106,0.28);
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 14px;
+    background: rgba(255,255,255,0.02);
+  }
+  .wgra-review-item h4 {
+    margin: 0 0 8px;
+    font-size: 17px;
+    color: var(--gold-soft);
+  }
+  .wgra-review-q {
+    font-size: 15px;
+    line-height: 1.6;
+    color: #f3f3f3;
+    white-space: pre-line;
+    margin: 0 0 10px;
+  }
+  .wgra-review-line { font-size: 15px; margin: 4px 0; }
+  .wgra-review-line .lbl { color: #c9c9c9; }
+  .wgra-result-correct { color: #8df0a6; font-weight: 800; }
+  .wgra-result-incorrect { color: #ffb0b0; font-weight: 800; }
+  .wgra-review-exp {
+    margin-top: 10px;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #ededed;
+    background: rgba(255,255,255,0.04);
+    border-left: 3px solid var(--gold);
+    padding: 9px 12px;
+    border-radius: 6px;
+  }
+
+  /* ---------------- MODAL ---------------- */
+  .wgra-modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.82);
+    z-index: 50;
+    padding: 24px 14px;
+    overflow-y: auto;
+  }
+  .wgra-modal-overlay.open { display: block; }
+  .wgra-modal {
+    max-width: 600px;
+    margin: 24px auto;
+    background: linear-gradient(135deg, #141414, #1d1d1d);
+    border: 2px solid rgba(245,210,106,0.6);
+    border-radius: 20px;
+    padding: 24px 20px;
+  }
+  .wgra-modal h3 {
+    margin: 0 0 14px;
+    color: var(--gold-soft);
+    font-size: 22px;
+  }
+  .wgra-modal p { font-size: 15px; line-height: 1.7; color: #ededed; }
+  .wgra-modal .muted { color: #bdbdbd; font-size: 14px; }
+  .wgra-modal ul { padding-left: 20px; font-size: 15px; line-height: 1.7; color: #ededed; }
+  .wgra-modal-close { margin-top: 18px; }
+
+  .wgra-footer-note {
+    text-align: center;
+    margin-top: 22px;
+    font-size: 13px;
+    color: #8d8d8d;
+    line-height: 1.6;
+  }
+
+  /* ---------------- MOBILE ---------------- */
+  @media (max-width: 480px) {
+    .wgra-title { font-size: 28px; }
+    .wgra-answers { grid-template-columns: 1fr; }
+    .wgra-scenario { font-size: 18px; }
+  }
+</style>
+</head>
+<body>
+<div class="wgra-app">
+  <div class="wgra-shell">
+
+    <header class="wgra-header">
+      <h1 class="wgra-title">Spot the Scam</h1>
+      <p class="wgra-subtitle">A free scam-awareness game by The Wealth Gap Resolution Algorithm&trade;</p>
+      <p class="wgra-intro">Practice spotting real-world money, identity, job, banking, charity, delivery, and tech-support scams.</p>
+      <div class="wgra-badges" aria-label="App privacy summary">
+        <span class="wgra-badge">Offline</span>
+        <span class="wgra-badge">No Ads</span>
+        <span class="wgra-badge">No Tracking</span>
+        <span class="wgra-badge">No Account</span>
+      </div>
+    </header>
+
+    <!-- START PANEL -->
+    <section id="wgra-start-panel" class="wgra-panel">
+      <p class="wgra-lead">You will see short messages that might be <strong>safe</strong> or <strong>scams</strong>. Read each one slowly, then choose:</p>
+      <ul class="wgra-rules">
+        <li><span class="tag">&#10004;</span><span><strong>Looks Safe</strong> &mdash; it seems normal and expected.</span></li>
+        <li><span class="tag">&#9888;</span><span><strong>Looks Risky</strong> &mdash; it feels like a trick or pressure.</span></li>
+      </ul>
+      <p class="wgra-lead">Each round has <strong>10 questions</strong> picked at random from 100 scenarios. Difficulty is shown so you can learn at your own pace.</p>
+      <button id="wgra-start-btn" class="wgra-btn wgra-btn-primary">Start the Game</button>
+      <div class="wgra-secondary-row">
+        <button class="wgra-btn wgra-btn-ghost" data-modal="wgra-modal-about">About</button>
+        <button class="wgra-btn wgra-btn-ghost" data-modal="wgra-modal-privacy">Privacy</button>
+        <button class="wgra-btn wgra-btn-ghost" data-modal="wgra-modal-credits">Credits</button>
+      </div>
+    </section>
+
+    <!-- GAME -->
+    <section id="wgra-game" class="wgra-game">
+      <div class="wgra-panel">
+        <div class="wgra-status">
+          <div>Question <strong id="wgra-qnum">1</strong> of <strong id="wgra-qtotal">10</strong></div>
+          <div>Score: <strong id="wgra-score">0</strong></div>
+        </div>
+        <div class="wgra-progress"><div id="wgra-progress-fill" class="wgra-progress-fill"></div></div>
+
+        <span id="wgra-difficulty" class="wgra-difficulty-pill">Difficulty: &ndash;</span>
+        <p id="wgra-scenario" class="wgra-scenario" aria-live="polite">Loading&hellip;</p>
+
+        <div class="wgra-answers">
+          <button class="wgra-btn wgra-btn-safe" data-choice="safe" aria-label="Looks Safe">&#10004; Looks Safe</button>
+          <button class="wgra-btn wgra-btn-risky" data-choice="risky" aria-label="Looks Risky">&#9888; Looks Risky</button>
+        </div>
+
+        <div id="wgra-feedback" class="wgra-feedback" aria-live="polite"></div>
+
+        <div id="wgra-next-wrap" class="wgra-next-wrap" style="display:none;">
+          <button id="wgra-next-btn" class="wgra-btn wgra-btn-next">Next Question</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- RESULTS -->
+    <section id="wgra-results" class="wgra-game">
+      <div class="wgra-panel">
+        <div class="wgra-results-head">
+          <div class="wgra-score-big"><span id="wgra-final-score">0</span> / 10</div>
+          <div class="wgra-score-pct"><span id="wgra-final-pct">0</span>% correct</div>
+          <div id="wgra-interpret" class="wgra-interpret"></div>
+        </div>
+        <div id="wgra-review"></div>
+        <button id="wgra-play-again" class="wgra-btn wgra-btn-primary">Play Again</button>
+        <div class="wgra-secondary-row">
+          <button id="wgra-review-toggle" class="wgra-btn wgra-btn-ghost">Hide Answers</button>
+        </div>
+      </div>
+    </section>
+
+    <div class="wgra-footer-note">
+      Spot the Scam v1.0.0 &middot; WGRALGO / The Wealth Gap Resolution Algorithm&trade; Inc.<br>
+      For education and awareness only. Not professional financial, legal, cybersecurity, or law-enforcement advice.
+    </div>
+
+  </div>
+</div>
+
+<!-- ABOUT MODAL -->
+<div id="wgra-modal-about" class="wgra-modal-overlay" role="dialog" aria-modal="true" aria-label="About">
+  <div class="wgra-modal">
+    <h3>About</h3>
+    <p>Spot the Scam is a free educational scam-awareness game created by WGRALGO / The Wealth Gap Resolution Algorithm&trade; Inc. It helps users practice spotting common red flags in scams involving money, identity, jobs, banking, delivery messages, fake prizes, tech support, and urgent payment demands.</p>
+    <p class="muted">Spot the Scam v1.0.0 &mdash; a free educational scam-awareness game by WGRALGO / The Wealth Gap Resolution Algorithm&trade; Inc.</p>
+    <button class="wgra-btn wgra-btn-ghost wgra-modal-close" data-close>Close</button>
+  </div>
+</div>
+
+<!-- PRIVACY MODAL -->
+<div id="wgra-modal-privacy" class="wgra-modal-overlay" role="dialog" aria-modal="true" aria-label="Privacy">
+  <div class="wgra-modal">
+    <h3>Privacy</h3>
+    <p>This app works offline. It does not collect personal data, does not use ads, does not use analytics, does not use trackers, does not require an account, and does not upload game activity to any server.</p>
+    <ul>
+      <li>No ads</li>
+      <li>No analytics</li>
+      <li>No trackers</li>
+      <li>No account</li>
+      <li>No cloud upload</li>
+      <li>No personal data collection</li>
+    </ul>
+    <button class="wgra-btn wgra-btn-ghost wgra-modal-close" data-close>Close</button>
+  </div>
+</div>
+
+<!-- CREDITS MODAL -->
+<div id="wgra-modal-credits" class="wgra-modal-overlay" role="dialog" aria-modal="true" aria-label="Credits">
+  <div class="wgra-modal">
+    <h3>Credits</h3>
+    <p><strong>Spot the Scam v1.0.0</strong><br>A free educational scam-awareness game by WGRALGO / The Wealth Gap Resolution Algorithm&trade; Inc.</p>
+    <p><strong>Contributors</strong></p>
+    <ul>
+      <li><strong>WGRALGO</strong> &mdash; Project owner, creator, maintainer, content direction, testing, and public-benefit mission.</li>
+      <li><strong>ChatGPT</strong> &mdash; Assisted with the original HTML/web game code used for the website version.</li>
+      <li><strong>Claude</strong> &mdash; Assisted with building the Android APK implementation.</li>
+    </ul>
+    <p class="muted">This project is owned and maintained by WGRALGO. AI tools are credited for development assistance and do not hold ownership of the project.</p>
+    <p class="muted"><strong>Educational disclaimer:</strong> This app is for education and awareness. It does not replace professional financial, legal, cybersecurity, or law-enforcement advice.</p>
+    <button class="wgra-btn wgra-btn-ghost wgra-modal-close" data-close>Close</button>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ===== 100-scenario pool ===== */
+  var scenarios = [
+    /* 1 */ { text: "An email claims to be from your bank:\n\n\"Click this link urgently to verify your login or your account will be locked.\"\n\nSender: security@bank-support-secure.com", correct: "risky", explanation: "Banks do not pressure you with urgent login links. A strange email address plus urgency is a classic phishing sign.", difficulty: 1 },
+    /* 2 */ { text: "Your banking app notifies you inside the official app:\n\n\"We detected a small charge. Was this you?\"\n\nYou review the charge in the app and tap “No” if it is not you.", correct: "safe", explanation: "Checking and confirming transactions inside your official banking app is a safe, recommended practice.", difficulty: 1 },
+    /* 3 */ { text: "\"You have WON a $1,000 gift card! Send a $25 fee via Zelle or Cash App to claim your prize right now!\"", correct: "risky", explanation: "Real prizes never require upfront fees. Zelle/Cash App requests are red flags.", difficulty: 1 },
+    /* 4 */ { text: "A caller says they are from \"Social Security Investigations\" and claims:\n\n\"Your Social Security number is suspended. Verify it now or lose benefits.\"", correct: "risky", explanation: "The SSA never suspends SSNs or demands verification by phone.", difficulty: 1 },
+    /* 5 */ { text: "A “recruiter” messages you about a job paying double the normal rate.\nThey send a check and ask you to buy gift cards and send the codes.", correct: "risky", explanation: "Overpayment scams always involve fake checks and gift card requests.", difficulty: 1 },
+    /* 6 */ { text: "You receive a letter from your current mortgage company with your real loan number.\nIt does not demand urgent payment, does not ask you to call a new number, and the details match your official mortgage statement.", correct: "safe", explanation: "This appears safe because it matches known account information and does not pressure you to pay or contact a new source. When unsure, verify through the number or website on your official statement.", difficulty: 2 },
+    /* 7 */ { text: "A salesperson offers you a reverse mortgage and says:\n\n\"Sign today to lock in a special rate — don’t worry about the fine print.\"", correct: "risky", explanation: "High-pressure tactics are major red flags in lending.", difficulty: 2 },
+    /* 8 */ { text: "You type your investment website's URL manually, see https + lock icon, and use two-factor authentication.", correct: "safe", explanation: "Typing the URL and enabling 2FA are safe habits.", difficulty: 1 },
+    /* 9 */ { text: "A charity email asks for cryptocurrency donations after a disaster.", correct: "risky", explanation: "Legitimate charities rarely ask for crypto to random wallet addresses.", difficulty: 2 },
+    /* 10 */ { text: "Your \"grandchild\" texts from a new number asking for emergency money and says not to call their parents.", correct: "risky", explanation: "This is the classic grandparent scam. Always verify.", difficulty: 1 },
+    /* 11 */ { text: "A text says your Amazon order can't be delivered.\nLink: http://amaz0n-verify-orders.com", correct: "risky", explanation: "Lookalike domains with subtle misspellings indicate a phishing scam.", difficulty: 2 },
+    /* 12 */ { text: "You get an email receipt for a subscription you never purchased, with a number to call to cancel.", correct: "risky", explanation: "Fake invoices lead to scam call centers.", difficulty: 2 },
+    /* 13 */ { text: "A neighbor you know personally asks to borrow money for groceries.", correct: "safe", explanation: "Personal in-person requests without digital elements are not scams.", difficulty: 1 },
+    /* 14 */ { text: "An email from 'PayPaI Support' uses a capital I instead of L.", correct: "risky", explanation: "Scammers use near-identical spoofed names.", difficulty: 2 },
+    /* 15 */ { text: "A text claims your driver’s license is suspended if you don’t click a provided link.", correct: "risky", explanation: "DMVs do not suspend licenses via text.", difficulty: 2 },
+    /* 16 */ { text: "You call your bank using the number printed on your card and speak to a rep.", correct: "safe", explanation: "Calling numbers YOU dial from official sources is safe.", difficulty: 1 },
+    /* 17 */ { text: "Your phone carrier says your bill is overdue and uses a .xyz link.", correct: "risky", explanation: "Official companies don’t use random cheap domains.", difficulty: 2 },
+    /* 18 */ { text: "Your Netflix account payment supposedly failed, and the email directs you to a link not ending in netflix.com.", correct: "risky", explanation: "Mismatched domains indicate phishing.", difficulty: 2 },
+    /* 19 */ { text: "A nonprofit you donated to last year emails you from its verified domain.", correct: "safe", explanation: "Past, verified organizations regularly send donation emails.", difficulty: 1 },
+    /* 20 */ { text: "A Facebook friend asks for emergency money — but their message doesn’t sound like them.", correct: "risky", explanation: "Hacked accounts often send urgent requests.", difficulty: 2 },
+    /* 21 */ { text: "A website offers extremely discounted shoes and was created 2 weeks ago.", correct: "risky", explanation: "New domains + unrealistic discounts = scam store.", difficulty: 2 },
+    /* 22 */ { text: "You get a PDF invoice for something you never bought.", correct: "risky", explanation: "Unsolicited attachments often carry malware.", difficulty: 2 },
+    /* 23 */ { text: "A family member asks for your new phone number with no links or requests.", correct: "safe", explanation: "No phishing elements present.", difficulty: 1 },
+    /* 24 */ { text: "An automated call says you qualify for a government grant — press 1 to claim.", correct: "risky", explanation: "The government doesn't award grants by robocall.", difficulty: 1 },
+    /* 25 */ { text: "Your debit card company sends a fraud alert inside the official banking app asking whether a small suspicious charge was yours.", correct: "safe", explanation: "Fraud alerts inside the official app are a safer way to confirm suspicious activity. Never share codes, PINs, or passwords by text or phone.", difficulty: 2 },
+    /* 26 */ { text: "A PDF labeled “Property Tax Refund” arrives unexpectedly.", correct: "risky", explanation: "Scammers use tax paperwork to steal info.", difficulty: 2 },
+    /* 27 */ { text: "You receive a welcome email from a site you signed up for earlier today.", correct: "safe", explanation: "Confirmation emails you initiated are safe.", difficulty: 1 },
+    /* 28 */ { text: "\"Your package is waiting. Pay $3 redelivery fee here: usps-redelivery-update.com\"", correct: "risky", explanation: "USPS does not charge fees through text links.", difficulty: 1 },
+    /* 29 */ { text: "A caller pretending to be police demands gift card payment for a fine.", correct: "risky", explanation: "Police don’t collect payments by phone or gift card.", difficulty: 1 },
+    /* 30 */ { text: "You manually access irs.gov yourself to read tax information.", correct: "safe", explanation: "Direct navigation to official sites is safe.", difficulty: 1 },
+    /* 31 */ { text: "\"Same-day $5,000 loan! No credit check! Pay $50 processing fee!\"", correct: "risky", explanation: "Advance-fee loans are illegal scams.", difficulty: 2 },
+    /* 32 */ { text: "Your bank emails your monthly statement from its official domain.", correct: "safe", explanation: "Regular statements from verified domains are safe.", difficulty: 1 },
+    /* 33 */ { text: "A stranger messages you claiming they sent you money on Cash App by mistake and want it refunded.", correct: "risky", explanation: "Refund scams rely on fraudulent initial payments.", difficulty: 2 },
+    /* 34 */ { text: "\"Your Apple ID has been locked. Verify now: apple-securecenter.com\"", correct: "risky", explanation: "Fake Apple domains are common.", difficulty: 2 },
+    /* 35 */ { text: "You receive a password-reset email from a site after YOU initiated it.", correct: "safe", explanation: "Reset emails you requested are safe.", difficulty: 1 },
+    /* 36 */ { text: "A recruiter messages you on LinkedIn from a real company domain. Instead of giving personal information in the chat, you manually visit the company’s official careers page and find the same job posted there.", correct: "safe", explanation: "Verifying the job through the official company careers page is safer than trusting links or attachments in a message.", difficulty: 2 },
+    /* 37 */ { text: "\"Your bank account is frozen. Confirm username and password urgently.\"\nFrom a Gmail address.", correct: "risky", explanation: "Banks never email from Gmail.", difficulty: 2 },
+    /* 38 */ { text: "A caller threatens to disconnect your electricity unless you pay immediately with Zelle.", correct: "risky", explanation: "Utility companies do not demand instant electronic payments.", difficulty: 2 },
+    /* 39 */ { text: "Your doctor’s office sends an appointment reminder for a date you booked.", correct: "safe", explanation: "Healthcare reminders are normal.", difficulty: 1 },
+    /* 40 */ { text: "A pop-up claims Microsoft detected a virus and urges you to call a phone number.", correct: "risky", explanation: "Microsoft does not issue pop-up warnings.", difficulty: 2 },
+    /* 41 */ { text: "A friend’s Instagram account advertises a crypto doubling scheme.", correct: "risky", explanation: "Crypto “flip” scams use hacked accounts.", difficulty: 2 },
+    /* 42 */ { text: "A verified nonprofit posts a fundraiser using its official social media account.", correct: "safe", explanation: "Verified accounts are trustworthy.", difficulty: 1 },
+    /* 43 */ { text: "\"Claim your free iPhone! Pay $12 shipping to receive it.\"", correct: "risky", explanation: "Prizes requiring payment are scams.", difficulty: 1 },
+    /* 44 */ { text: "Your employer emails you from the official company domain about required training.", correct: "safe", explanation: "Official HR communication is legitimate.", difficulty: 1 },
+    /* 45 */ { text: "\"This is the IRS. Pay now or face immediate arrest.\"", correct: "risky", explanation: "The IRS never threatens arrest by phone.", difficulty: 1 },
+    /* 46 */ { text: "Your credit card app alerts you to a suspicious purchase and asks you to confirm through the app.", correct: "safe", explanation: "Secure app alerts are legitimate.", difficulty: 1 },
+    /* 47 */ { text: "A fake PayPal message uses a domain like paypal-resolution-center.net.", correct: "risky", explanation: "PayPal only uses paypal.com or paypalobjects.com.", difficulty: 2 },
+    /* 48 */ { text: "Your bank declines a suspicious charge while you’re traveling and notifies you in-app.", correct: "safe", explanation: "Banks monitor out-of-state charges.", difficulty: 1 },
+    /* 49 */ { text: "\"You have an unclaimed inheritance. Provide your SSN to release the funds.\"", correct: "risky", explanation: "Inheritance scams steal identities.", difficulty: 2 },
+    /* 50 */ { text: "Your email provider warns your inbox is nearly full and directs you to upgrade storage through the official domain.", correct: "safe", explanation: "Storage notices from verified domains are safe.", difficulty: 1 },
+    /* 51 */ { text: "A buyer on Facebook Marketplace sends extra money and asks you to refund the difference through Zelle or Cash App.", correct: "risky", explanation: "Overpayment scams depend on fake payment reversals.", difficulty: 3 },
+    /* 52 */ { text: "Your bank texts you about a locked account, but the link uses a misspelled version of the bank’s domain.", correct: "risky", explanation: "Lookalike domains attempt to steal credentials.", difficulty: 3 },
+    /* 53 */ { text: "Your child’s school emails you using its official district domain with schedule updates.", correct: "safe", explanation: "Schools use verified domains for communication.", difficulty: 1 },
+    /* 54 */ { text: "A caller claiming to be your bank asks for your debit card PIN to verify your identity.", correct: "risky", explanation: "Banks never ask for your PIN under any circumstances.", difficulty: 3 },
+    /* 55 */ { text: "You verify a family member’s medical fundraiser by speaking to them directly before donating.", correct: "safe", explanation: "Direct confirmation ensures legitimacy.", difficulty: 1 },
+    /* 56 */ { text: "\"Your Social Security benefits will increase. Confirm your personal information to process the update.\"", correct: "risky", explanation: "SSA does not request personal info through unsolicited messages.", difficulty: 2 },
+    /* 57 */ { text: "A pop-up on a website claims your smartphone is infected and urges immediate action.", correct: "risky", explanation: "Pop-up virus warnings are fake — designed to install malware.", difficulty: 2 },
+    /* 58 */ { text: "Your credit card app alerts you about a suspicious transaction and offers buttons INSIDE the app to confirm or deny it.", correct: "safe", explanation: "Banks use secure in-app alerts for verification.", difficulty: 1 },
+    /* 59 */ { text: "\"Unauthorized login attempt detected. Log in at: bank-login-security-check.com to secure your account.\"", correct: "risky", explanation: "Fake domains commonly mimic bank security alerts.", difficulty: 3 },
+    /* 60 */ { text: "You see a QR code flyer claiming to offer free gift cards for scanning.", correct: "risky", explanation: "Random QR codes may lead to phishing or malware.", difficulty: 3 },
+    /* 61 */ { text: "\"We detected unusual activity on your Zelle account. Verify by entering your bank login information here.\"", correct: "risky", explanation: "Zelle never asks for bank logins outside official channels.", difficulty: 3 },
+    /* 62 */ { text: "Your HR department emails you from the company domain and tells you to log into the official HR/payroll portal you already use to update onboarding tax documents.", correct: "safe", explanation: "Updating tax documents through a known official HR portal is safer than sending personal documents by email or through unknown links.", difficulty: 2 },
+    /* 63 */ { text: "A random person on Cash App claims they sent you money by mistake and wants a refund.", correct: "risky", explanation: "Common Cash App refund scam involving fraudulent initial transactions.", difficulty: 3 },
+    /* 64 */ { text: "\"Your car warranty has expired. Renew immediately to avoid lapse!\" Caller refuses to provide company details.", correct: "risky", explanation: "Warranty robocalls are high-volume scams.", difficulty: 2 },
+    /* 65 */ { text: "A trusted family member sends you a video you were expecting with no suspicious links or requests.", correct: "safe", explanation: "Direct communication without malicious links is safe.", difficulty: 1 },
+    /* 66 */ { text: "An email says you missed jury duty and must pay a fine online to avoid arrest.", correct: "risky", explanation: "Courts do not issue fines via email.", difficulty: 3 },
+    /* 67 */ { text: "\"Your Geek Squad subscription has been renewed for $349. Call immediately to cancel.\" Caller wants remote access to your computer.", correct: "risky", explanation: "Tech support scams often impersonate major brands.", difficulty: 3 },
+    /* 68 */ { text: "\"You qualify for federal loan forgiveness. Pay a $99 processing fee to enroll today.\"", correct: "risky", explanation: "Federal forgiveness programs do not require upfront payment.", difficulty: 3 },
+    /* 69 */ { text: "Your online pharmacy sends a refill reminder for medication you actually requested.", correct: "safe", explanation: "Expected prescription reminders are legitimate.", difficulty: 1 },
+    /* 70 */ { text: "A scammer claiming to be Apple Support says your iCloud was hacked and directs you to a special site.", correct: "risky", explanation: "Apple does not call users with unsolicited security alerts.", difficulty: 3 },
+    /* 71 */ { text: "\"You won a luxury vacation! Pay taxes and fees today to claim your trip.\"", correct: "risky", explanation: "Prize scams always require upfront fees.", difficulty: 2 },
+    /* 72 */ { text: "Your credit union sends a secure message inside your online banking platform asking you to verify a new login.", correct: "safe", explanation: "Banks use internal secure messaging for sensitive alerts.", difficulty: 2 },
+    /* 73 */ { text: "\"We updated our privacy policy. Click here to continue accessing your account.\" Link is shortened and unrecognizable.", correct: "risky", explanation: "Scammers use vague notices to lure victims into fake login portals.", difficulty: 3 },
+    /* 74 */ { text: "A rental listing requires a deposit before you can tour the unit.", correct: "risky", explanation: "Scammers frequently demand deposits before viewings.", difficulty: 3 },
+    /* 75 */ { text: "Your dentist’s office texts you the same appointment reminder format you are used to.", correct: "safe", explanation: "Consistent communication is a positive sign.", difficulty: 1 },
+    /* 76 */ { text: "\"Your package is on hold due to unpaid customs fees. Pay now to release.\"", correct: "risky", explanation: "Scammers impersonate customs and delivery services.", difficulty: 2 },
+    /* 77 */ { text: "A caller claims to be from your bank’s fraud department and asks for the last four digits of your SSN. You did not call them first.", correct: "risky", explanation: "Banks do not request SSN details over unsolicited calls.", difficulty: 3 },
+    /* 78 */ { text: "A retailer emails you a promo code after you signed up for their newsletter.", correct: "safe", explanation: "Legitimate marketing emails come from official opt-ins.", difficulty: 1 },
+    /* 79 */ { text: "A caller claiming to be from the county clerk’s office demands prepaid cards for “court fees.”", correct: "risky", explanation: "Government agencies do not accept prepaid cards.", difficulty: 2 },
+    /* 80 */ { text: "Your cell phone carrier sends your monthly bill through its official domain.", correct: "safe", explanation: "Regular billing statements are legitimate.", difficulty: 1 },
+    /* 81 */ { text: "\"Unusual login attempt from overseas detected. Confirm your credentials to continue using your account.\"", correct: "risky", explanation: "Sophisticated scammers mimic real alerts.", difficulty: 3 },
+    /* 82 */ { text: "A scammer sends you a picture of a fake Amazon return label demanding address confirmation.", correct: "risky", explanation: "Fraudsters fabricate shipping problems to phish for info.", difficulty: 3 },
+    /* 83 */ { text: "\"Get $500 instantly! Only available for the next 5 minutes!\"", correct: "risky", explanation: "High-pressure giveaways are scam tactics.", difficulty: 2 },
+    /* 84 */ { text: "Your pharmacy texts you that your prescription is ready — matching medication you actually take.", correct: "safe", explanation: "Expected pharmacy notifications are legitimate.", difficulty: 1 },
+    /* 85 */ { text: "A caller tells you to “reverse” a fraudulent Zelle transfer by sending money to yourself.", correct: "risky", explanation: "Banks never instruct customers to send money to themselves.", difficulty: 4 },
+    /* 86 */ { text: "An email from your real bank domain warns of a new login and shows a link that appears correct. Hovering reveals a redirect to a foreign domain.", correct: "risky", explanation: "Sophisticated phishers spoof visible URLs — hovering exposes the true destination.", difficulty: 5 },
+    /* 87 */ { text: "A caller knows your insurance policy number, address, and claim history, and asks to confirm your birthdate “for security.”", correct: "risky", explanation: "Scammers often purchase detailed data from breaches — do not confirm DOB to unsolicited callers.", difficulty: 5 },
+    /* 88 */ { text: "A credit report website looks identical to a real bureau. HTTPS is present, and it has a privacy policy — but the company name is slightly off.", correct: "risky", explanation: "Cloned websites with minor name variations harvest SSNs.", difficulty: 5 },
+    /* 89 */ { text: "You receive a DocuSign email you were expecting, but the subject line format is slightly different from your company’s usual template.", correct: "risky", explanation: "Even expected DocuSign messages should be verified if the format looks unusual. Do not click until you confirm through the sender or your official account.", difficulty: 5 },
+    /* 90 */ { text: "\"Your bank transfer of $0.00 is complete. Review the transaction here.\"", correct: "risky", explanation: "Zero-dollar transaction notices are phishing bait.", difficulty: 5 },
+    /* 91 */ { text: "You receive a bank verification code even though you did not attempt a login.", correct: "risky", explanation: "Someone is trying to reset your password — never share codes.", difficulty: 5 },
+    /* 92 */ { text: "Your bank app shows an in-app alert about a login attempt. The alert has no links and tells you to review activity by opening the security section inside the app.", correct: "safe", explanation: "The alert itself is safe because it appears inside the official app and does not ask for codes or passwords. The login attempt may still mean you should change your password and enable 2FA.", difficulty: 4 },
+    /* 93 */ { text: "A charity website appears fully legitimate but uses an EIN that, when checked, belongs to a different organization.", correct: "risky", explanation: "Sophisticated scams copy real EINs to appear credible.", difficulty: 5 },
+    /* 94 */ { text: "Your credit union texts you a fraud alert and tells you to call a number that is only one digit off from your card’s official number.", correct: "risky", explanation: "Scammers use lookalike numbers. Always call the number printed on your card.", difficulty: 5 },
+    /* 95 */ { text: "Your bank emails you new terms and conditions with no links — it instructs you to log into your app manually.", correct: "safe", explanation: "Safe emails contain no clickable links and advise manual login.", difficulty: 3 },
+    /* 96 */ { text: "A lender with a real license number offers a low interest rate, but before you complete any official application, they ask you to text or email a copy of your ID.", correct: "risky", explanation: "Scammers can copy real license numbers. Sending ID before a verified application through a secure official process is risky.", difficulty: 5 },
+    /* 97 */ { text: "A friend refers you to a financial mentor who helped them — but the mentor wants you to send money “to demonstrate commitment.”", correct: "risky", explanation: "Warm introductions can come from hacked accounts — upfront payments are a major red flag.", difficulty: 5 },
+    /* 98 */ { text: "An eBay seller asks you to pay using PayPal Friends & Family to avoid seller fees.", correct: "risky", explanation: "Friends & Family eliminates buyer protection — a subtle advanced scam.", difficulty: 4 },
+    /* 99 */ { text: "A voicemail states the last 4 digits of your SSN were used in a suspicious application and tells you to call back immediately.", correct: "risky", explanation: "Scammers often use partial real data to build trust — never call numbers from unsolicited messages.", difficulty: 5 },
+    /* 100 */ { text: "A text asks, “Did you attempt a bank login?” with no link. Responding triggers a second message asking for your full username.", correct: "risky", explanation: "Advanced multi-step phishing starts innocently before requesting credentials.", difficulty: 5 }
+  ];
+
+  /* ===== helpers ===== */
+  function shuffle(arr) {
+    var a = arr.slice();
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+
+  function difficultyLabel(n) {
+    switch (n) {
+      case 1: return "Very Easy (1/5)";
+      case 2: return "Easy (2/5)";
+      case 3: return "Moderate (3/5)";
+      case 4: return "Hard (4/5)";
+      case 5: return "Very Hard (5/5)";
+      default: return n + "/5";
+    }
+  }
+
+  function choiceLabel(c) { return c === "safe" ? "Looks Safe" : "Looks Risky"; }
+
+  function esc(s) {
+    return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
+
+  var ROUND = 10;
+
+  /* ===== state ===== */
+  var round = [];
+  var idx = 0;
+  var score = 0;
+  var answered = false;
+  var history = [];
+
+  /* ===== DOM ===== */
+  var startPanel = document.getElementById("wgra-start-panel");
+  var gameSec = document.getElementById("wgra-game");
+  var resultsSec = document.getElementById("wgra-results");
+  var startBtn = document.getElementById("wgra-start-btn");
+  var qnum = document.getElementById("wgra-qnum");
+  var qtotal = document.getElementById("wgra-qtotal");
+  var scoreEl = document.getElementById("wgra-score");
+  var progressFill = document.getElementById("wgra-progress-fill");
+  var diffEl = document.getElementById("wgra-difficulty");
+  var scenarioEl = document.getElementById("wgra-scenario");
+  var feedbackEl = document.getElementById("wgra-feedback");
+  var nextWrap = document.getElementById("wgra-next-wrap");
+  var nextBtn = document.getElementById("wgra-next-btn");
+  var answerBtns = gameSec.querySelectorAll("[data-choice]");
+  var finalScore = document.getElementById("wgra-final-score");
+  var finalPct = document.getElementById("wgra-final-pct");
+  var interpretEl = document.getElementById("wgra-interpret");
+  var reviewEl = document.getElementById("wgra-review");
+  var playAgainBtn = document.getElementById("wgra-play-again");
+  var reviewToggle = document.getElementById("wgra-review-toggle");
+
+  qtotal.textContent = ROUND;
+
+  function startRound() {
+    round = shuffle(scenarios).slice(0, ROUND);
+    idx = 0;
+    score = 0;
+    history = [];
+    scoreEl.textContent = "0";
+    qtotal.textContent = ROUND;
+    startPanel.style.display = "none";
+    resultsSec.style.display = "none";
+    gameSec.style.display = "block";
+    renderScenario();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function setAnswerable(on) {
+    for (var i = 0; i < answerBtns.length; i++) answerBtns[i].disabled = !on;
+  }
+
+  function renderScenario() {
+    var s = round[idx];
+    qnum.textContent = idx + 1;
+    progressFill.style.width = ((idx) / ROUND * 100) + "%";
+    diffEl.textContent = "Difficulty: " + difficultyLabel(s.difficulty);
+    scenarioEl.textContent = s.text;
+    feedbackEl.innerHTML = "";
+    nextWrap.style.display = "none";
+    answered = false;
+    setAnswerable(true);
+  }
+
+  function handleChoice(choice) {
+    if (answered) return;
+    answered = true;
+    var s = round[idx];
+    var ok = choice === s.correct;
+    if (ok) { score++; scoreEl.textContent = score; }
+    history.push({ s: s, choice: choice, ok: ok });
+    progressFill.style.width = ((idx + 1) / ROUND * 100) + "%";
+
+    var head = ok
+      ? '<div class="wgra-feedback-result good">Correct.</div>'
+      : '<div class="wgra-feedback-result bad">Not quite.</div>';
+    var lead = ok ? "Here’s why:" : "Here’s what to watch for:";
+    feedbackEl.innerHTML = head +
+      '<div class="wgra-feedback-why"><strong>' + lead + '</strong> ' + esc(s.explanation) + '</div>';
+
+    setAnswerable(false);
+    nextBtn.textContent = (idx === ROUND - 1) ? "See My Results" : "Next Question";
+    nextWrap.style.display = "block";
+  }
+
+  function interpret(sc) {
+    if (sc >= 8) return "Strong scam radar. You spotted the pressure and lookalike tricks scammers rely on.";
+    if (sc >= 5) return "Good start. Review the missed items below — small details often give scams away.";
+    return "Keep practicing. Scammers rely on pressure and confusion. Slow down and verify before you act.";
+  }
+
+  function showResults() {
+    gameSec.style.display = "none";
+    resultsSec.style.display = "block";
+    var pct = Math.round(score / ROUND * 100);
+    finalScore.textContent = score;
+    finalPct.textContent = pct;
+    interpretEl.textContent = interpret(score);
+
+    var html = "";
+    for (var i = 0; i < history.length; i++) {
+      var h = history[i];
+      var resCls = h.ok ? "wgra-result-correct" : "wgra-result-incorrect";
+      var resTxt = h.ok ? "Correct" : "Incorrect";
+      html +=
+        '<div class="wgra-review-item">' +
+          '<h4>Question ' + (i + 1) + '</h4>' +
+          '<p class="wgra-review-q">' + esc(h.s.text) + '</p>' +
+          '<div class="wgra-review-line"><span class="lbl">Difficulty:</span> ' + difficultyLabel(h.s.difficulty) + '</div>' +
+          '<div class="wgra-review-line"><span class="lbl">Your answer:</span> ' + choiceLabel(h.choice) + '</div>' +
+          '<div class="wgra-review-line"><span class="lbl">Correct answer:</span> ' + choiceLabel(h.s.correct) + '</div>' +
+          '<div class="wgra-review-line"><span class="lbl">Result:</span> <span class="' + resCls + '">' + resTxt + '</span></div>' +
+          '<div class="wgra-review-exp"><strong>Explanation:</strong> ' + esc(h.s.explanation) + '</div>' +
+        '</div>';
+    }
+    reviewEl.innerHTML = html;
+    reviewEl.style.display = "block";
+    reviewToggle.textContent = "Hide Answers";
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  /* ===== events ===== */
+  startBtn.addEventListener("click", startRound);
+  playAgainBtn.addEventListener("click", startRound);
+
+  for (var i = 0; i < answerBtns.length; i++) {
+    answerBtns[i].addEventListener("click", function () {
+      handleChoice(this.getAttribute("data-choice"));
+    });
+  }
+
+  nextBtn.addEventListener("click", function () {
+    if (idx === ROUND - 1) { showResults(); return; }
+    idx++;
+    renderScenario();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+
+  reviewToggle.addEventListener("click", function () {
+    var hidden = reviewEl.style.display === "none";
+    reviewEl.style.display = hidden ? "block" : "none";
+    reviewToggle.textContent = hidden ? "Hide Answers" : "Review Answers";
+  });
+
+  /* ===== modals ===== */
+  function openModal(id) {
+    var m = document.getElementById(id);
+    if (m) m.classList.add("open");
+  }
+  function closeModals() {
+    var all = document.querySelectorAll(".wgra-modal-overlay");
+    for (var i = 0; i < all.length; i++) all[i].classList.remove("open");
+  }
+  document.addEventListener("click", function (e) {
+    var t = e.target;
+    if (t.hasAttribute && t.hasAttribute("data-modal")) { openModal(t.getAttribute("data-modal")); return; }
+    if (t.hasAttribute && t.hasAttribute("data-close")) { closeModals(); return; }
+    if (t.classList && t.classList.contains("wgra-modal-overlay")) { closeModals(); }
+  });
+})();
+</script>
+</body>
+</html>
